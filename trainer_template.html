@@ -1,0 +1,864 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>Trainer OPE Fisioterapeuta SESPA</title>
+<style>
+/* Tres estados de tema, no dos: el visor puede estampar data-theme="dark" o
+   "light" en la raíz, y en el ajuste "sistema" no estampa nada y solo cuenta
+   prefers-color-scheme. Los tokens se redefinen en los tres sitios para que la
+   página resuelva igual en cualquiera de ellos. */
+:root, :root[data-theme="light"]{
+  --bg:#f8fafc; --panel:#fff; --panel2:#f1f5f9; --txt:#0f172a; --tenue:#64748b;
+  --acento:#0284c7; --ok:#16a34a; --mal:#dc2626; --borde:#cbd5e1;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f172a; --panel:#1e293b; --panel2:#334155; --txt:#e2e8f0; --tenue:#94a3b8;
+    --acento:#38bdf8; --ok:#22c55e; --mal:#ef4444; --borde:#475569;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f172a; --panel:#1e293b; --panel2:#334155; --txt:#e2e8f0; --tenue:#94a3b8;
+  --acento:#38bdf8; --ok:#22c55e; --mal:#ef4444; --borde:#475569;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+body{margin:0; background:var(--bg); color:var(--txt); font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+     padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.wrap{max-width:760px; margin:0 auto; padding:12px}
+h1{font-size:1.2rem; margin:.2rem 0 1rem}
+.oculto{display:none !important}
+
+/* barra superior */
+.barra{position:sticky; top:0; z-index:9; background:var(--bg); padding:8px 0; border-bottom:1px solid var(--borde);
+       display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.crono{font-variant-numeric:tabular-nums; font-weight:700; font-size:1.1rem; min-width:64px}
+.crono.rojo{color:var(--mal)}
+.progreso{flex:1; height:6px; background:var(--panel2); border-radius:3px; overflow:hidden; min-width:80px}
+.progreso > i{display:block; height:100%; background:var(--acento); width:0; transition:width .3s}
+.marcador{font-size:.85rem; color:var(--tenue); white-space:nowrap}
+
+/* tarjetas */
+.card{background:var(--panel); border:1px solid var(--borde); border-radius:12px; padding:14px; margin:12px 0}
+.meta{font-size:.78rem; color:var(--tenue); margin-bottom:8px}
+.enunciado{font-size:1.05rem; font-weight:600; margin:6px 0 14px}
+.contexto{font-size:.85rem; color:var(--tenue); background:var(--panel2); padding:10px;
+          border-radius:8px; margin-bottom:10px; max-height:8.5em; overflow:auto}
+
+/* opciones: objetivo táctil grande */
+button.op{display:flex; gap:10px; width:100%; text-align:left; background:var(--panel2); color:var(--txt);
+          border:2px solid transparent; border-radius:10px; padding:13px; margin:8px 0; font-size:1rem;
+          cursor:pointer; align-items:flex-start; line-height:1.45}
+button.op:active{transform:scale(.995)}
+button.op .letra{font-weight:800; color:var(--acento); min-width:1.4em}
+button.op.ok{border-color:var(--ok); background:color-mix(in srgb, var(--ok) 16%, var(--panel2))}
+button.op.mal{border-color:var(--mal); background:color-mix(in srgb, var(--mal) 16%, var(--panel2))}
+button.op[disabled]{cursor:default}
+
+.btn{background:var(--acento); color:#04283a; border:0; border-radius:10px; padding:13px 18px;
+     font-size:1rem; font-weight:700; cursor:pointer; width:100%; margin-top:10px}
+.btn.sec{background:var(--panel2); color:var(--txt); border:1px solid var(--borde)}
+.fila{display:flex; gap:8px; flex-wrap:wrap}
+.fila > *{flex:1; min-width:120px}
+
+/* feedback */
+.feed{border-radius:10px; padding:12px; margin-top:12px; font-size:.9rem}
+.feed.ok{background:color-mix(in srgb, var(--ok) 14%, transparent); border:1px solid var(--ok)}
+.feed.mal{background:color-mix(in srgb, var(--mal) 14%, transparent); border:1px solid var(--mal)}
+.feed b{font-size:1rem}
+.chip{display:inline-block; background:var(--panel2); border:1px solid var(--borde); border-radius:999px;
+      padding:3px 10px; font-size:.76rem; margin:3px 4px 0 0}
+.chip.fuerte{background:color-mix(in srgb, var(--acento) 22%, var(--panel2)); border-color:var(--acento)}
+
+select,input[type=number]{background:var(--panel2); color:var(--txt); border:1px solid var(--borde);
+       border-radius:8px; padding:11px; font-size:1rem; width:100%}
+label{display:block; font-size:.85rem; color:var(--tenue); margin:12px 0 4px}
+table{width:100%; border-collapse:collapse; font-size:.85rem}
+td,th{padding:6px 4px; border-bottom:1px solid var(--borde); text-align:left}
+td.num{text-align:right; font-variant-numeric:tabular-nums}
+.grande{font-size:2rem; font-weight:800}
+.nota{font-size:.8rem; color:var(--tenue)}
+.barrita{height:6px; background:var(--panel2); border-radius:3px; overflow:hidden}
+.barrita > i{display:block; height:100%; background:var(--acento)}
+
+/* panel "por qué esta pregunta" */
+details > summary{cursor:pointer; font-weight:700; padding:8px 0; list-style:revert}
+.porque{margin-top:6px; font-size:.9rem}
+.porque > p{margin:8px 0}
+.factor{border:1px solid var(--borde); border-radius:10px; margin:10px 0; overflow:hidden}
+.factor-cab{display:flex; align-items:baseline; gap:8px; padding:9px 11px;
+            background:var(--panel2); flex-wrap:wrap}
+.factor-cab > span:nth-child(2){flex:1; min-width:150px}
+.factor-n{display:inline-flex; align-items:center; justify-content:center;
+          width:1.5em; height:1.5em; border-radius:50%; background:var(--acento);
+          color:var(--panel); font-weight:800; font-size:.8rem; flex:none}
+.factor-val{font-variant-numeric:tabular-nums; font-weight:800; font-size:1.05rem;
+            color:var(--acento)}
+.factor-cuerpo{padding:9px 11px}
+.factor-cuerpo p{margin:5px 0}
+.cuenta{font-variant-numeric:tabular-nums; background:var(--panel2);
+        border-radius:6px; padding:6px 8px; font-size:.85rem}
+.como-leer{border-left:3px solid var(--acento); padding-left:8px; margin-top:8px !important}
+.total{font-variant-numeric:tabular-nums; background:var(--panel2); border-radius:8px;
+       padding:10px; text-align:center; font-size:.95rem}
+.cierre{background:color-mix(in srgb, var(--acento) 16%, transparent);
+        border-radius:8px; padding:9px; margin:8px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ================= INICIO ================= -->
+<section id="inicio">
+  <h1>Trainer OPE · Fisioterapeuta SESPA 2025</h1>
+  <div class="card" id="estado-portada"></div>
+  <div class="card">
+    <div id="cuenta-atras" class="meta"></div>
+    <label for="n-preg">Preguntas</label>
+    <select id="n-preg">
+      <option value="10">10 · repaso corto (12 min)</option>
+      <option value="20">20 · sesión media (25 min)</option>
+      <option value="40">40 · media prueba (50 min)</option>
+      <option value="80" selected>80 · simulacro completo (100 min)</option>
+    </select>
+
+    <label for="modo">Selección de preguntas</label>
+    <select id="modo">
+      <option value="examen" selected>Como el examen · 15 general / 65 específico</option>
+      <option value="canon">Canon · lo que más cae, priorizando lo reciente</option>
+      <option value="top7">Top 7 temas · el 46 % del examen específico</option>
+      <option value="autonomico">Solo autonómico · lo que ninguna otra CCAA cubre</option>
+      <option value="asturias">Solo Asturias · parte general del SESPA</option>
+      <option value="flojos">Mis temas flojos · donde más fallo</option>
+      <option value="todo">Aleatorio puro</option>
+    </select>
+
+    <label for="tema-filtro">Tema concreto (opcional)</label>
+    <select id="tema-filtro"><option value="">— todos —</option></select>
+
+    <button class="btn" id="empezar">Empezar</button>
+    <div class="fila">
+      <button class="btn sec" id="ver-cobertura">Cobertura del temario</button>
+      <button class="btn sec" id="ver-stats">Mis estadísticas</button>
+    </div>
+    <button class="btn sec" id="exportar">Exportar historial</button>
+    <div id="aviso-reanudar"></div>
+    <div id="caja-export" class="oculto">
+      <label for="json-export">Historial en JSON</label>
+      <textarea id="json-export" rows="6" readonly
+                style="width:100%;background:var(--panel2);color:var(--txt);
+                       border:1px solid var(--borde);border-radius:8px;padding:10px;
+                       font:12px/1.4 ui-monospace,Menlo,Consolas,monospace"></textarea>
+      <button class="btn sec" id="copiar-json">Copiar al portapapeles</button>
+    </div>
+  </div>
+  <p class="nota">Sin penalización: los fallos no restan. Contesta siempre, aunque dudes.</p>
+</section>
+
+<!-- ================= TEST ================= -->
+<section id="test" class="oculto">
+  <div class="barra">
+    <span class="crono" id="crono">0:00</span>
+    <div class="progreso"><i id="barra-prog"></i></div>
+    <span class="marcador" id="marcador">0/0</span>
+  </div>
+
+  <div class="card">
+    <div class="meta" id="meta-preg"></div>
+    <div class="contexto oculto" id="contexto"></div>
+    <div class="enunciado" id="enunciado"></div>
+    <div id="opciones"></div>
+    <div id="feedback"></div>
+    <button class="btn oculto" id="siguiente">Siguiente</button>
+  </div>
+  <button class="btn sec" id="abandonar">Guardar y salir</button>
+</section>
+
+<!-- ================= RESULTADO ================= -->
+<section id="resultado" class="oculto">
+  <h1>Resultado</h1>
+  <div class="card" id="resumen"></div>
+  <div class="card"><h1 style="font-size:1rem">Por tema</h1><div id="por-tema"></div></div>
+  <button class="btn" id="otra">Otra sesión</button>
+  <button class="btn sec" id="volver">Inicio</button>
+</section>
+
+<!-- ================= COBERTURA ================= -->
+<section id="cobertura" class="oculto">
+  <h1>Cobertura del temario</h1>
+  <div class="card" id="cob-resumen"></div>
+  <div class="card" id="cob-siguiente"></div>
+  <div class="card">
+    <h1 style="font-size:1rem">Los 44 temas, por peso en el examen</h1>
+    <div style="overflow-x:auto" id="cob-tabla"></div>
+  </div>
+  <button class="btn sec" id="volver3">Inicio</button>
+</section>
+
+<!-- ================= ESTADÍSTICAS ================= -->
+<section id="stats" class="oculto">
+  <h1>Mis estadísticas</h1>
+  <div class="card" id="stats-global"></div>
+  <div class="card"><h1 style="font-size:1rem">Aciertos por tema</h1><div id="stats-temas"></div></div>
+  <button class="btn sec" id="volver2">Inicio</button>
+  <button class="btn sec" id="borrar">Borrar historial</button>
+</section>
+
+</div>
+
+<script>
+/* ====== DATOS (inyectados por generar_trainer.py) ====== */
+const DATOS = /*__DATOS__*/{"preguntas":[],"familias":{},"temas":{},"pesos":{},"pesosMeta":{},"meta":{}};
+const SEGUNDOS_POR_PREGUNTA = 75;   // 80 preguntas / 100 minutos
+const FECHA_EXAMEN = "2026-09-12";
+const CLAVE = "ope_trainer_v1";
+
+/* ====== ESTADO ====== */
+let estado = cargar();
+let sesion = null;      // {preguntas, i, respuestas, inicio, segundos}
+let cronoId = null;
+
+function cargar(){
+  try{
+    const s = JSON.parse(localStorage.getItem(CLAVE) || "{}");
+    return {historial: s.historial || [], porTema: s.porTema || {}, sesionAbierta: s.sesionAbierta || null};
+  }catch(e){ return {historial:[], porTema:{}, sesionAbierta:null}; }
+}
+function guardar(){
+  try{
+    localStorage.setItem(CLAVE, JSON.stringify({
+      historial: estado.historial, porTema: estado.porTema,
+      sesionAbierta: sesion ? {preguntas: sesion.preguntas.map(p=>p.id), i: sesion.i,
+                               respuestas: sesion.respuestas, segundos: sesion.segundos} : null
+    }));
+  }catch(e){ /* cuota llena: no romper la sesión por esto */ }
+}
+
+/* ====== SELECCIÓN DE PREGUNTAS ====== */
+const esGeneral = p => p.tema !== null && p.tema <= 11;
+
+function tasaFallo(tema){
+  const t = estado.porTema[tema];
+  if(!t || t.n < 3) return 0.5;              // sin datos: prioridad media
+  return 1 - (t.ok / t.n);
+}
+/* El canon se mueve: la punción seca y el vendaje neuromuscular no existían en
+   2005. Por eso manda la RECENCIA (suma de 0.5^(antigüedad/8) de cada miembro) y
+   la frecuencia bruta solo modula, en escala logarítmica.
+
+   Con el producto anterior (conv² · recencia) pasaba justo lo contrario: un hecho
+   de 2005 repetido en tres convocatorias sacaba 9 × 0.48 = 4,3 puntos y uno de
+   2026 con una sola aparición se quedaba en 1,0. Ganaba lo viejo. Ahora ese mismo
+   par da 1,44 frente a 2,0: gana lo reciente, que es lo que cae. */
+/* Preguntas que se esperan de este tema en el examen, según la muestra revisada
+   a mano. Si el tema no está medido, se usa el reparto uniforme. */
+const esGeneralTema = t => t !== null && t <= 11;
+function esperadasDe(tema){
+  const p = DATOS.pesos[tema];
+  if(p) return p.esp;
+  return esGeneralTema(tema) ? DATOS.pesosMeta.uniformeGen : DATOS.pesosMeta.uniformeEsp;
+}
+
+/* Los tres factores que eligen una pregunta, cada uno con su porqué:
+   - peso   : cuánto vale ese tema en el examen (preguntas esperadas)
+   - canon  : cuánto se repite ese hecho, dando más valor a lo reciente
+   - dominio: cuánto te falta por dominarlo (1 − tu acierto)
+   El suelo de 0,15 en dominio evita que un tema con el 100 % de aciertos
+   desaparezca del todo: sigue cayendo en el examen aunque lo lleves bien. */
+function factores(p){
+  const fam = p.fam !== null ? DATOS.familias[p.fam] : null;
+  const conv = fam ? fam.c : 1;
+  const rec  = fam ? fam.rm : 0.35;   // recencia media por miembro, 0 a 1
+  const canon = rec * (1 + Math.log2(1 + conv));
+  const peso = p.tema !== null ? esperadasDe(p.tema) : DATOS.pesosMeta.uniformeEsp;
+  const t = p.tema !== null ? estado.porTema[p.tema] : null;
+  const acierto = (t && t.n >= 3) ? t.ok / t.n : null;
+  const dominio = Math.max(0.15, 1 - (acierto === null ? 0.5 : acierto));
+  return {peso, canon, dominio, acierto, conv, rec, fam,
+          total: peso * canon * dominio};
+}
+/* Puntuación típica del banco, para que el número del panel signifique algo:
+   "sacó 6,3" no dice nada sin saber que la media anda por 1,2. Se calcula sobre
+   una muestra, que basta para una mediana y no cuesta nada al abrir. */
+let MEDIANA_TOTAL = 0;
+function calcularMediana(){
+  const muestra = DATOS.preguntas.length > 400
+    ? DATOS.preguntas.filter((_, i) => i % Math.ceil(DATOS.preguntas.length/400) === 0)
+    : DATOS.preguntas;
+  const vs = muestra.map(p => factores(p).total).sort((a,b) => a-b);
+  MEDIANA_TOTAL = vs.length ? vs[Math.floor(vs.length/2)] : 0;
+}
+
+function pesoDe(p, modo){
+  const f = factores(p);
+  if(modo === "canon")  return f.canon;
+  if(modo === "flojos") return 1 + 4 * f.dominio;
+  return f.total;   // examen, top7 y asturias: los tres factores a la vez
+}
+function elegirPonderado(pool, n, modo){
+  const copia = pool.slice();
+  const salida = [];
+  while(salida.length < n && copia.length){
+    const pesos = copia.map(p => pesoDe(p, modo));
+    const total = pesos.reduce((a,b)=>a+b, 0);
+    let r = Math.random() * total, k = 0;
+    while(k < copia.length - 1 && (r -= pesos[k]) > 0) k++;
+    salida.push(copia.splice(k,1)[0]);
+  }
+  return salida;
+}
+/* Los siete temas que concentran el 46 % del examen específico (30 de 65). */
+const TOP7 = [39, 21, 19, 22, 28, 23, 30];
+
+function construirSesion(n, modo, temaFiltro){
+  let pool = DATOS.preguntas;
+  if(temaFiltro) pool = pool.filter(p => String(p.tema) === String(temaFiltro));
+  // La parte general de otras comunidades pregunta por su propia normativa y no
+  // sirve; la del SESPA sí, venga de la categoría que venga. Y dentro de esa, el
+  // bloque estrictamente autonómico (Estatuto, Ley de Salud del Principado,
+  // estructura del SESPA) es el que no tiene ninguna transferencia.
+  if(modo === "autonomico") pool = pool.filter(p => p.amb === "autonomico");
+  if(modo === "asturias")   pool = pool.filter(p => p.amb === "asturias" || p.amb === "autonomico");
+  if(modo === "top7")     pool = pool.filter(p => TOP7.includes(p.tema));
+  if(!pool.length) return [];
+
+  let elegidas;
+  if(modo === "examen" && !temaFiltro){
+    // Misma proporción que la prueba real: 15 de 80 generales.
+    const nGen = Math.round(n * 15/80), nEsp = n - nGen;
+    const gen = pool.filter(esGeneral), esp = pool.filter(p => !esGeneral(p));
+    elegidas = elegirPonderado(gen, Math.min(nGen, gen.length), modo)
+       .concat(elegirPonderado(esp, Math.min(nEsp, esp.length), modo));
+  }else if(modo === "todo"){
+    elegidas = pool.slice().sort(()=>Math.random()-.5).slice(0, n);
+  }else{
+    elegidas = elegirPonderado(pool, Math.min(n, pool.length), modo);
+  }
+  return elegidas.sort(()=>Math.random()-.5);
+}
+
+/* ====== PANTALLAS ====== */
+const $ = id => document.getElementById(id);
+function mostrar(sec){
+  ["inicio","test","resultado","stats","cobertura"]
+    .forEach(s => $(s).classList.toggle("oculto", s !== sec));
+  if(sec === "inicio") pintarPortada();
+  window.scrollTo(0,0);
+}
+
+/* ====== CRONÓMETRO ====== */
+function arrancarCrono(){
+  clearInterval(cronoId);
+  cronoId = setInterval(()=>{
+    sesion.segundos++;
+    const total = sesion.preguntas.length * SEGUNDOS_POR_PREGUNTA;
+    const queda = total - sesion.segundos;
+    const signo = queda < 0 ? "-" : "";
+    const abs = Math.abs(queda);
+    $("crono").textContent = `${signo}${Math.floor(abs/60)}:${String(abs%60).padStart(2,"0")}`;
+    $("crono").classList.toggle("rojo", queda < 60);
+  }, 1000);
+}
+
+/* ====== FLUJO DEL TEST ====== */
+function pintarPregunta(){
+  const p = sesion.preguntas[sesion.i];
+  sesion.factoresActual = factores(p);   // antes de contestar, que es cuando cuentan
+  $("marcador").textContent = `${sesion.i+1}/${sesion.preguntas.length}`;
+  $("barra-prog").style.width = (100*sesion.i/sesion.preguntas.length) + "%";
+  $("meta-preg").textContent =
+      `${p.org} ${p.a || ""}${p.cat ? " · " + p.cat : ""} · ${p.tema ? "Tema "+p.tema : "sin tema"}`
+      + (p.amb === "autonomico" ? " · AUTONÓMICA" : p.amb === "asturias" ? " · ASTURIAS" : "");
+  $("enunciado").textContent = p.q;
+  $("contexto").classList.toggle("oculto", !p.ctx);
+  if(p.ctx) $("contexto").textContent = p.ctx;
+  $("feedback").innerHTML = "";
+  $("siguiente").classList.add("oculto");
+
+  const cont = $("opciones");
+  cont.innerHTML = "";
+  const letras = ["A","B","C","D","E","F"];
+  p.o.forEach((texto, k) => {
+    const b = document.createElement("button");
+    b.className = "op";
+    b.innerHTML = `<span class="letra">${letras[k]}</span><span>${escapar(texto)}</span>`;
+    b.onclick = () => responder(k, b);
+    cont.appendChild(b);
+  });
+}
+function escapar(s){ const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+
+/* Panel "por qué esta pregunta". Usa los factores capturados ANTES de responder,
+   que son los que de verdad la eligieron: recalcularlos después daría el estado
+   ya actualizado con esta misma respuesta. */
+function porQueEstaPregunta(p){
+  const f = sesion.factoresActual;
+  if(!f) return "";
+  const M = DATOS.pesosMeta;
+  const uniforme = esGeneralTema(p.tema) ? M.uniformeGen : M.uniformeEsp;
+  const rank = (DATOS.pesos[p.tema] || {}).rank;
+  const t = p.tema !== null ? estado.porTema[p.tema] : null;
+
+  // Qué factor mandó: el que más se aleja de su valor neutro.
+  const desvios = [
+    ["por el peso que tiene este tema en el examen", f.peso / uniforme],
+    ["porque este hecho se repite mucho y hace poco", f.canon / 1.0],
+    [t && t.n >= 3 ? "porque fallas en este tema" : "porque nunca has tocado este tema",
+     f.dominio / 0.5],
+  ].sort((a,b) => b[1] - a[1]);
+  const domina = desvios[0][1] >= 1.6 && desvios[0][1] >= desvios[1][1] * 1.4
+    ? `<p class="cierre"><b>Elegida sobre todo ${desvios[0][0]}.</b></p>` : "";
+
+  const ultimo = f.fam ? (f.fam.d || []).map(s => s.match(/\d{4}/)).filter(Boolean)
+                           .map(m => m[0]).sort().at(-1) : null;
+  const veces = f.peso / uniforme;
+  const bloque = esGeneralTema(p.tema) ? "15 generales" : "65 específicas";
+
+  const factor = (num, titulo, pregunta, valor, cuerpo, comoLeer) => `
+    <div class="factor">
+      <div class="factor-cab"><span class="factor-n">${num}</span>
+        <span><b>${titulo}</b> <span class="nota">— ${pregunta}</span></span>
+        <span class="factor-val">${valor}</span></div>
+      <div class="factor-cuerpo">${cuerpo}
+        <p class="nota como-leer">${comoLeer}</p></div>
+    </div>`;
+
+  return `<details style="margin-top:10px">
+   <summary>Por qué esta pregunta</summary>
+   <div class="porque">
+
+    <p>El trainer puntúa cada pregunta con tres factores y te va sirviendo las de
+    puntuación más alta. Esta sacó <b>${f.total.toFixed(1)}</b>${
+      MEDIANA_TOTAL ? `; la pregunta media del banco saca ${MEDIANA_TOTAL.toFixed(1)}` : ""}.</p>
+
+    ${factor(1, "El peso del tema", "¿cuánto cae este tema?", f.peso.toFixed(2),
+      p.tema === null
+        ? `<p>Esta pregunta no tiene tema asignado, así que va el valor medio.</p>`
+        : `<p>Tema ${p.tema} sale unas <b>${f.peso.toFixed(1)} veces</b> de las
+           ${bloque}${rank ? `, el nº ${rank} de 33` : ""}. Si todos los temas
+           cayeran por igual serían ${uniforme.toFixed(2)}, así que este sale
+           <b>${veces.toFixed(1)}×</b> ${veces >= 1 ? "más" : "menos"}.</p>`,
+      "Cuanto más alto, más rentable dominarlo: son preguntas que caen seguro.")}
+
+    ${factor(2, "El canon", "¿este hecho concreto se repite?", f.canon.toFixed(2),
+      f.fam
+        ? `<p>Forma una familia de <b>${f.fam.n} preguntas</b> que preguntan lo
+           mismo con otras palabras, repartidas en <b>${f.conv} convocatoria${
+             f.conv === 1 ? "" : "s"}</b>${ultimo ? `, la última en ${ultimo}` : ""}.</p>
+           <p class="cuenta">recencia ${f.rec.toFixed(2)} × ${(1+Math.log2(1+f.conv)).toFixed(2)}
+           (por caer en ${f.conv}) = <b>${f.canon.toFixed(2)}</b></p>
+           <p class="nota">La recencia va de 0 a 1: vale 1 si la familia es de este
+           año y 0,5 si es de hace ocho. Así lo reciente pesa más que lo antiguo
+           repetido, porque el temario se mueve.</p>`
+        : `<p>Es una <b>pregunta suelta</b>: no se parece a ninguna otra del banco,
+           así que nadie la ha repetido. Va con el valor bajo por defecto (0,35).</p>`,
+      "Alto = lo han preguntado varias veces y hace poco. Es lo que más probable que vuelva a caer.")}
+
+    ${factor(3, "Lo que te falta", "¿lo dominas ya?", f.dominio.toFixed(2),
+      t && t.n >= 3
+        ? `<p>Llevas <b>${t.ok} de ${t.n}</b> en este tema, un
+           ${Math.round(100*t.ok/t.n)} % de acierto. Lo que te falta es
+           1 − ${(t.ok/t.n).toFixed(2)} = <b>${f.dominio.toFixed(2)}</b>.</p>`
+        : `<p>${t && t.n ? `Solo llevas ${t.n} respuesta${t.n===1?"":"s"} aquí`
+             : "Primera vez que ves este tema"}, todavía no hay datos suficientes,
+           así que va el valor neutro <b>0,50</b>. Con tres respuestas empieza a
+           usar tu acierto real.</p>`,
+      "Baja según vas acertando, así que el trainer deja de insistir en lo que ya dominas. No llega a cero: aunque lo domines, sigue cayendo en el examen.")}
+
+    <p class="total">Puntuación = ${f.peso.toFixed(2)} × ${f.canon.toFixed(2)}
+       × ${f.dominio.toFixed(2)} = <b>${f.total.toFixed(1)}</b></p>
+    ${domina}
+
+    <p class="nota" style="margin-top:10px">Los pesos por tema están medidos sobre
+    ${M.nEsp} preguntas clasificadas a mano, con un margen de ±${M.margen}
+    preguntas. Que un tema esté en el grupo de cabeza es fiable; su puesto exacto
+    dentro del grupo, no.</p>
+   </div></details>`;
+}
+
+function responder(k, boton){
+  const p = sesion.preguntas[sesion.i];
+  const correcta = "ABCDEF".indexOf(p.r);
+  const acierto = k === correcta;
+
+  [...$("opciones").children].forEach((b,idx)=>{
+    b.disabled = true;
+    if(idx === correcta) b.classList.add("ok");
+    else if(idx === k) b.classList.add("mal");
+  });
+
+  sesion.respuestas.push({id:p.id, tema:p.tema, fam:p.fam, ok:acierto, elegida:k});
+  if(p.tema !== null){
+    const t = estado.porTema[p.tema] || (estado.porTema[p.tema] = {n:0, ok:0});
+    t.n++; if(acierto) t.ok++;
+  }
+
+  const fam = p.fam !== null ? DATOS.familias[p.fam] : null;
+  let chips = "";
+  if(p.tema !== null) chips += `<span class="chip">Tema ${p.tema} · ${escapar(DATOS.temas[p.tema]||"")}</span>`;
+  if(p.amb === "autonomico")
+    chips += `<span class="chip fuerte">Bloque autonómico · ninguna otra CCAA lo cubre</span>`;
+  else if(p.amb === "asturias")
+    chips += `<span class="chip fuerte">Normativa asturiana · cae seguro</span>`;
+  if(p.cat) chips += `<span class="chip">Salió en ${escapar(p.cat)}${p.a ? " " + p.a : ""}</span>`;
+  if(fam){
+    const clase = fam.c >= 2 ? "chip fuerte" : "chip";
+    chips += `<span class="${clase}">Canon · familia de ${fam.n} preguntas en ${fam.c} convocatoria${fam.c===1?"":"s"}</span>`;
+    if(fam.c >= 2) chips += `<span class="chip">${escapar(fam.d.join(", "))}</span>`;
+  }else{
+    chips += `<span class="chip">Sin familia · pregunta suelta</span>`;
+  }
+
+  $("feedback").className = "feed " + (acierto ? "ok" : "mal");
+  $("feedback").innerHTML = (acierto ? "<b>Correcta</b>" : `<b>Incorrecta</b> · la buena era la ${p.r}`) +
+     `<div style="margin-top:6px">${chips}</div>` + porQueEstaPregunta(p);
+  $("siguiente").classList.remove("oculto");
+  $("siguiente").textContent = (sesion.i === sesion.preguntas.length-1) ? "Ver resultado" : "Siguiente";
+  guardar();
+}
+
+function siguiente(){
+  if(sesion.i < sesion.preguntas.length-1){ sesion.i++; pintarPregunta(); guardar(); }
+  else terminar();
+}
+
+function terminar(){
+  clearInterval(cronoId);
+  const acs = sesion.respuestas.filter(r=>r.ok).length;
+  const n = sesion.respuestas.length;
+  const pct = n ? acs/n : 0;
+  const sobre80 = (pct*80);
+
+  estado.historial.push({fecha:new Date().toISOString(), n, aciertos:acs,
+                         segundos:sesion.segundos, respuestas:sesion.respuestas});
+  sesion = null; guardar();
+
+  const min = Math.floor(estado.historial.at(-1).segundos/60);
+  const seg = estado.historial.at(-1).segundos%60;
+  $("resumen").innerHTML =
+    `<div class="grande">${acs}/${n} · ${(100*pct).toFixed(0)}%</div>
+     <p>Proyección sobre 80 preguntas: <b>${sobre80.toFixed(1)} puntos</b> de 100.
+     ${sobre80 >= 50 ? "Por encima del 50 necesario para superar." : "Por debajo del 50 necesario."}</p>
+     <p class="nota">Tiempo: ${min}:${String(seg).padStart(2,"0")} · ritmo
+     ${n ? (estado.historial.at(-1).segundos/n).toFixed(0) : 0} s/pregunta (el examen da 75).</p>`;
+
+  const porTema = {};
+  estado.historial.at(-1).respuestas.forEach(r=>{
+    if(r.tema===null) return;
+    (porTema[r.tema] = porTema[r.tema] || {n:0,ok:0}).n++;
+    if(r.ok) porTema[r.tema].ok++;
+  });
+  $("por-tema").innerHTML = tablaTemas(porTema);
+  mostrar("resultado");
+}
+
+function tablaTemas(datos){
+  const filas = Object.entries(datos).sort((a,b)=> (a[1].ok/a[1].n) - (b[1].ok/b[1].n));
+  if(!filas.length) return "<p class='nota'>Sin datos.</p>";
+  return `<table><tr><th>Tema</th><th class="num">Aciertos</th><th style="width:35%"></th></tr>` +
+    filas.map(([t,v])=>{
+      const pc = Math.round(100*v.ok/v.n);
+      return `<tr><td>${t} · ${escapar((DATOS.temas[t]||"").slice(0,34))}</td>
+        <td class="num">${v.ok}/${v.n}</td>
+        <td><div class="barrita"><i style="width:${pc}%"></i></div></td></tr>`;
+    }).join("") + `</table>`;
+}
+
+/* ====== COBERTURA ======
+   La cuenta que importa: cuántas de las 80 preguntas del examen tienes ya
+   aseguradas. Para cada tema, esperadas × tu tasa de acierto. Sin datos de un
+   tema no se supone nada: cuenta como 0 aseguradas y se marca aparte, porque
+   inventar un acierto medio infla la proyección justo donde no has estudiado. */
+const TOP7_SET = new Set(TOP7);
+
+/* Tu acierto global: la mejor estimación para un tema del que aún no sabes nada. */
+function aciertoGlobal(){
+  let n = 0, ok = 0;
+  for(const t of Object.values(estado.porTema)){ n += t.n; ok += t.ok; }
+  return {n, ok, tasa: n ? ok/n : null};
+}
+
+/* Acierto estimado de un tema, mezclando lo tuyo con tu media global.
+   Con pocos datos manda la media (que es información real y no cero); según
+   respondes en ese tema, manda lo medido. Sin el suavizado, un tema con dos
+   respuestas contaba como 0 y hundía la proyección hasta hacerla absurda:
+   13 respuestas con un 77 % de acierto daban 7,8 sobre 80. */
+const K_SUAVIZADO = 3;
+function aciertoEstimado(tema, global){
+  const t = estado.porTema[tema];
+  if(global.tasa === null) return null;              // sin ningún dato aún
+  if(!t) return {valor: global.tasa, medido: false};
+  return {valor: (t.ok + K_SUAVIZADO * global.tasa) / (t.n + K_SUAVIZADO),
+          medido: t.n >= 3};
+}
+
+function filasCobertura(){
+  const global = aciertoGlobal();
+  const filas = [];
+  for(let t = 1; t <= 44; t++){
+    const esperadas = esperadasDe(t);
+    const mio = estado.porTema[t];
+    const est = aciertoEstimado(t, global);
+    filas.push({
+      tema: t,
+      nombre: DATOS.temas[t] || "",
+      esperadas,
+      hechas: mio ? mio.n : 0,
+      propio: (mio && mio.n) ? mio.ok / mio.n : null,   // lo tuyo, tal cual
+      estimado: est ? est.valor : null,                 // lo usado para proyectar
+      medido: est ? est.medido : false,
+      aseguradas: est ? esperadas * est.valor : 0,
+      general: esGeneralTema(t),
+      top7: TOP7_SET.has(t),
+      disponibles: DATOS.preguntas.filter(p => p.tema === t).length,
+    });
+  }
+  return filas.sort((a,b) => b.esperadas - a.esperadas);
+}
+
+/* Margen de la proyección: error estándar de una proporción, llevado a 80
+   preguntas. Con 13 respuestas es enorme, y esconderlo sería peor que enseñarlo. */
+function margenProyeccion(global){
+  if(!global.n) return null;
+  const p = global.tasa;
+  return 1.96 * Math.sqrt(Math.max(p*(1-p), 0.01) / global.n) * 80;
+}
+
+function pintarCobertura(){
+  const filas = filasCobertura();
+  const M = DATOS.pesosMeta;
+  const global = aciertoGlobal();
+  const proyeccion = filas.reduce((a,f) => a + f.aseguradas, 0);
+  const margen = margenProyeccion(global);
+  const medidos = filas.filter(f => f.medido);
+  // Lo que está respaldado por datos de ese tema, sin extrapolar nada.
+  const respaldado = medidos.reduce((a,f) => a + f.esperadas * f.propio, 0);
+  const pesoMedido = medidos.reduce((a,f) => a + f.esperadas, 0);
+
+  $("cob-resumen").innerHTML = !global.n
+    ? `<p class="nota">Todavía no hay respuestas. Haz una sesión y vuelve.</p>`
+    : `<div class="grande">${proyeccion.toFixed(0)} <span class="nota"
+         style="font-size:1rem">± ${margen.toFixed(0)}</span> / 80</div>
+       <p>Proyección de nota. ${proyeccion >= 50
+          ? "Por encima del 50 que exige la base 7.1."
+          : `Faltan ${(50-proyeccion).toFixed(0)} para el 50 que exige la base 7.1.`}</p>
+       <table style="margin-top:10px">
+         <tr><td>Temas con datos propios<br><span class="nota">3 o más respuestas tuyas</span></td>
+             <td class="num"><b>${medidos.length}</b> de 44</td></tr>
+         <tr><td>Del examen ya respaldado<br><span class="nota">preguntas cubiertas por esos temas</span></td>
+             <td class="num"><b>${pesoMedido.toFixed(0)}</b> de 80</td></tr>
+         <tr><td>De esas, acertarías<br><span class="nota">sin extrapolar nada</span></td>
+             <td class="num"><b>${respaldado.toFixed(1)}</b></td></tr>
+       </table>
+       <p class="nota" style="margin-top:8px">En los temas que aún no has tocado la
+       proyección usa tu acierto medio (${Math.round(100*global.tasa)} %), no un cero:
+       con ${global.n} respuestas es la mejor estimación que hay, pero por eso el
+       margen es de ±${margen.toFixed(0)}. El número de arriba se vuelve fiable
+       cuando la fila "respaldado" se acerca a 80.</p>
+       <p class="nota">Pesos por tema medidos sobre ${M.nEsp} preguntas clasificadas
+       a mano, margen ±${M.margen} preguntas: quién está en cabeza es fiable, el
+       orden exacto dentro del grupo no.</p>`;
+
+  /* Dónde está el siguiente punto: lo que ganarías llevando cada tema al 80 %.
+     Prioriza peso alto con acierto bajo, que es donde una hora cunde más. */
+  const ganancia = filas
+    .filter(f => f.esperadas >= 1 && f.disponibles >= 5)
+    .map(f => ({...f, gana: f.esperadas * (0.8 - (f.estimado === null ? 0.5 : f.estimado))}))
+    .filter(f => f.gana > 0.1)
+    .sort((a,b) => b.gana - a.gana)
+    .slice(0, 3);
+
+  $("cob-siguiente").innerHTML =
+    `<h1 style="font-size:1rem">Dónde está tu siguiente punto</h1>` +
+    (ganancia.length
+      ? `<p class="nota">Llevar cada uno al 80 % de aciertos sumaría:</p>` +
+        ganancia.map(f => `<p style="margin:8px 0">
+          <b>+${f.gana.toFixed(1)} puntos</b> · T${f.tema} ${escapar(f.nombre.slice(0,44))}<br>
+          <span class="nota">${f.esperadas.toFixed(1)} esperadas ·
+          ${f.propio === null ? "sin tocar"
+             : Math.round(100*f.propio) + " % en tus " + f.hechas +
+               (f.medido ? "" : " (pocas aún)")} ·
+          ${f.disponibles} preguntas disponibles</span></p>`).join("")
+      : `<p class="nota">Haz algunas sesiones más y aquí aparecerán los temas
+         donde más sube la nota.</p>`);
+
+  let acumulado = 0, marcada = false;
+  const cuerpo = filas.map(f => {
+    acumulado += f.general ? 0 : f.esperadas;
+    const pintaBarrera = !f.general && !marcada && acumulado >= 30;
+    if(pintaBarrera) marcada = true;
+    const pc = f.propio === null ? null : Math.round(100 * f.propio);
+    const fila = `<tr${f.top7 ? ' style="background:color-mix(in srgb,var(--acento) 10%,transparent)"' : ""}>
+      <td>${f.top7 ? "★ " : ""}T${f.tema}${f.general ? " <span class='nota'>gen</span>" : ""}<br>
+          <span class="nota">${escapar(f.nombre.slice(0,38))}</span></td>
+      <td class="num">${f.esperadas.toFixed(1)}</td>
+      <td class="num">${f.hechas || "—"}</td>
+      <td class="num">${pc === null ? "—" : pc + "%"}${f.medido ? "" : "<span class='nota'>*</span>"}</td>
+      <td class="num"><b>${f.aseguradas.toFixed(1)}</b></td></tr>`;
+    return fila + (pintaBarrera
+      ? `<tr><td colspan="5" class="nota" style="border-bottom:2px solid var(--acento)">
+         ▲ hasta aquí el 46 % del examen específico (los 7 temas de arriba)</td></tr>`
+      : "");
+  }).join("");
+
+  $("cob-tabla").innerHTML =
+    `<table><tr><th>Tema</th><th class="num">Esperadas</th><th class="num">Hechas</th>
+     <th class="num">Acierto</th><th class="num">Aseguradas</th></tr>${cuerpo}</table>
+     <p class="nota">La columna "acierto" es el tuyo real en ese tema; con asterisco
+     cuando aún son menos de 3 respuestas. "Aseguradas" es lo que aporta el tema a
+     la proyección, ya suavizado con tu media global.</p>`;
+  mostrar("cobertura");
+}
+
+/* ====== PORTADA ====== */
+function pintarPortada(){
+  const global = aciertoGlobal();
+  if(!global.n){
+    $("estado-portada").innerHTML =
+      `<div class="grande">— / 80</div>
+       <p>Haz tu primera sesión y aquí verás la proyección de nota.</p>`;
+    return;
+  }
+  const filas = filasCobertura();
+  const proyeccion = filas.reduce((a,f) => a + f.aseguradas, 0);
+  const margen = margenProyeccion(global);
+  const medidos = filas.filter(f => f.medido).length;
+
+  $("estado-portada").innerHTML =
+    `<div class="grande">${proyeccion.toFixed(0)} <span class="nota"
+       style="font-size:1rem">± ${margen.toFixed(0)}</span> / 80</div>
+     <p>Proyección de nota. ${proyeccion - margen >= 50
+        ? "<b>Aprobado incluso en el peor caso.</b>"
+        : proyeccion >= 50
+          ? `Por encima del 50, pero el margen aún llega hasta ${(proyeccion-margen).toFixed(0)}.`
+          : `Faltan ${(50-proyeccion).toFixed(0)} para el 50.`}</p>
+     <p class="nota">${global.n} preguntas respondidas ·
+     ${Math.round(100*global.tasa)} % de acierto · ${estado.historial.length} sesiones ·
+     ${medidos} de 44 temas con datos propios</p>
+     ${global.n < 40 ? `<p class="nota">Con ${global.n} respuestas el margen es
+     grande: la proyección usa tu acierto medio en los temas que aún no has
+     tocado. Se afina sola a partir de unas 40.</p>` : ""}`;
+}
+
+/* ====== ESTADÍSTICAS ====== */
+function pintarStats(){
+  const h = estado.historial;
+  const n = h.reduce((a,s)=>a+s.n,0), ok = h.reduce((a,s)=>a+s.aciertos,0);
+  $("stats-global").innerHTML = h.length
+    ? `<div class="grande">${n ? Math.round(100*ok/n) : 0}%</div>
+       <p>${ok} aciertos de ${n} preguntas en ${h.length} sesiones.</p>
+       <p class="nota">Proyección actual sobre 80: <b>${n ? (80*ok/n).toFixed(1) : 0}</b> puntos.</p>`
+    : "<p class='nota'>Todavía no hay sesiones registradas.</p>";
+  $("stats-temas").innerHTML = tablaTemas(estado.porTema);
+  mostrar("stats");
+}
+
+/* ====== EVENTOS ====== */
+$("empezar").onclick = () => {
+  const n = +$("n-preg").value;
+  const preguntas = construirSesion(n, $("modo").value, $("tema-filtro").value);
+  if(!preguntas.length){ alert("No hay preguntas con ese filtro."); return; }
+  sesion = {preguntas, i:0, respuestas:[], segundos:0};
+  mostrar("test"); pintarPregunta(); arrancarCrono(); guardar();
+};
+$("siguiente").onclick = siguiente;
+$("abandonar").onclick = () => { clearInterval(cronoId); if(sesion && sesion.respuestas.length) terminar(); else { sesion=null; guardar(); mostrar("inicio"); } };
+$("otra").onclick = () => mostrar("inicio");
+$("volver").onclick = () => mostrar("inicio");
+$("volver2").onclick = () => mostrar("inicio");
+$("volver3").onclick = () => mostrar("inicio");
+$("ver-stats").onclick = pintarStats;
+$("ver-cobertura").onclick = pintarCobertura;
+$("borrar").onclick = () => {
+  if(confirm("¿Borrar todo el historial? No se puede deshacer.")){
+    estado = {historial:[], porTema:{}, sesionAbierta:null}; guardar(); pintarStats();
+  }
+};
+/* Exportar tiene que funcionar en los dos sitios donde vive esta página: abierta
+   como fichero local, donde la descarga va sola; y publicada, donde el sandbox
+   deja inerte cualquier descarga que inicie la propia página. Por eso siempre se
+   muestra el JSON a mano, y la descarga es el extra cuando el entorno la permite. */
+$("exportar").onclick = async () => {
+  const texto = JSON.stringify(estado, null, 1);
+  $("caja-export").classList.remove("oculto");
+  $("json-export").value = texto;
+
+  // Publicada, la descarga la media el visor y hay que pedirla por la capacidad
+  // `downloads`; abierta como fichero local, no existe `claude` y se usa el blob.
+  const api = (window.claude && claude.use) ? await claude.use("downloads") : null;
+  if(api){
+    try{
+      await api.save({filename:"historial_ope.json", data:texto});
+      $("caja-export").classList.add("oculto");   // guardado: sobra el cuadro
+    }catch(e){
+      // "declined" es una respuesta legítima del usuario, no un error que avisar.
+      if(e && e.code && e.code !== "declined") console.warn("guardar:", e.code);
+    }
+    return;
+  }
+  try{
+    const url = URL.createObjectURL(new Blob([texto], {type:"application/json"}));
+    const a = document.createElement("a");
+    a.href = url; a.download = "historial_ope.json"; a.click();
+    setTimeout(()=>URL.revokeObjectURL(url), 4000);
+  }catch(e){ /* queda el texto para copiar */ }
+};
+$("copiar-json").onclick = async () => {
+  const ta = $("json-export");
+  try{
+    await navigator.clipboard.writeText(ta.value);
+    $("copiar-json").textContent = "Copiado";
+  }catch(e){
+    ta.select();                       // sin permiso de portapapeles, a mano
+    $("copiar-json").textContent = "Selecciónalo y copia";
+  }
+  setTimeout(()=>{ $("copiar-json").textContent = "Copiar al portapapeles"; }, 2500);
+};
+
+/* Guardar al pasar a segundo plano: en móvil el navegador puede matar la pestaña
+   sin previo aviso, y visibilitychange es el único evento fiable para esto. */
+document.addEventListener("visibilitychange", () => { if(document.hidden) guardar(); });
+window.addEventListener("pagehide", guardar);
+window.addEventListener("beforeunload", e => {
+  if(sesion && sesion.respuestas.length < sesion.preguntas.length){
+    e.preventDefault(); e.returnValue = "";
+  }
+});
+
+/* ====== ARRANQUE ====== */
+(function init(){
+  calcularMediana();
+  const sel = $("tema-filtro");
+  Object.keys(DATOS.temas).sort((a,b)=>a-b).forEach(t=>{
+    const o = document.createElement("option");
+    o.value = t; o.textContent = `${t} · ${DATOS.temas[t]}`;
+    sel.appendChild(o);
+  });
+
+  const dias = Math.ceil((new Date(FECHA_EXAMEN) - new Date()) / 86400000);
+  $("cuenta-atras").textContent = dias > 0
+    ? `Examen el 12 de septiembre · quedan ${dias} días · ${DATOS.meta.n} preguntas disponibles`
+    : `${DATOS.meta.n} preguntas disponibles`;
+
+  const ab = estado.sesionAbierta;
+  if(ab && ab.i > 0 && ab.i < ab.preguntas.length){
+    $("aviso-reanudar").innerHTML =
+      `<p class="nota">Tienes una sesión a medias (${ab.i}/${ab.preguntas.length}).</p>`;
+    const b = document.createElement("button");
+    b.className = "btn sec"; b.textContent = "Reanudar sesión";
+    b.onclick = () => {
+      const porId = Object.fromEntries(DATOS.preguntas.map(p=>[p.id,p]));
+      const ps = ab.preguntas.map(id=>porId[id]).filter(Boolean);
+      if(!ps.length){ alert("Esa sesión ya no es válida."); return; }
+      sesion = {preguntas:ps, i:Math.min(ab.i, ps.length-1), respuestas:ab.respuestas||[],
+                segundos:ab.segundos||0};
+      mostrar("test"); pintarPregunta(); arrancarCrono();
+    };
+    $("aviso-reanudar").appendChild(b);
+  }
+})();
+</script>
+</body>
+</html>

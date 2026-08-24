@@ -1,0 +1,110 @@
+--- INVENTARIO ----------------------------------------------------------
+preguntas en el corpus : 3810
+  por organismo : Osakidetza=1120, SAS=907, SCS=557, SES=137, SMS=125, Red Sanitaria Militar=110, SESCAM=105, SALUD=103, SERIS=100, SACYL=99, SESPA=95, JCyL=92, IB-Salut=72, SERMAS=70, DGA=65, Hospital de Poniente=53
+  por CCAA      : País Vasco=1120, Andalucía=960, Canarias=288, Cantabria=269, Castilla y León=191, Aragón=168, Extremadura=137, Murcia=125, Estatal=110, Castilla-La Mancha=105, La Rioja=100, Asturias=95, Baleares=72, Madrid=70
+  por origen    : html=2862, pdf_texto=853, ocr=95
+  SIN respuesta verificada: 704 (Osakidetza=700, SESPA=4)
+  procedentes de OCR (conf<1.0): 95
+  penalización por fallo: no consta=3562, 0.25=153, 0.2=95
+  preguntas de reserva  : 18 (no puntuaron, pero salieron del mismo banco)
+--- SIN DEPENDER DE LA RESPUESTA (corpus entero) ------------------------
+preguntas con opción comodín: 237 (6.2 % del corpus)
+--- DEPENDEN DE LA RESPUESTA (solo 3106 verificadas) --------------------
+distribución de la letra correcta (n=3106):
+  A:  702   22.6 %
+  B:  809   26.0 %
+  C:  771   24.8 %
+  D:  824   26.5 %
+opción comodín: aparece en 160 preguntas verificadas y es la correcta en 72 (45.0 %; el azar daría 25 %)
+sesgo de longitud (n=3106): la correcta mide +2.4 caracteres frente a la media de las otras tres
+  t=4.00  p=0.0001  -> SIGNIFICATIVO
+posición de la correcta según el signo del enunciado:
+  NEGATIVO  n= 596  A=18.1% B=26.0% C=29.2% D=26.7%
+  POSITIVO  n=2510  A=23.7% B=26.1% C=23.8% D=26.5%
+acierto marcando siempre la letra más frecuente:
+  penalización 0.2   n=  91  'B' acierta 35.2 % -> valor esperado +0.222 por pregunta: compensa
+  penalización 0.25  n= 153  'B' acierta 26.1 % -> valor esperado +0.077 por pregunta: compensa
+  sin penalización   n=2862  'D' acierta 26.7 % -> contestar siempre es gratis
+--- RECURRENCIAS --------------------------------------------------------
+enunciados de 80+ caracteres en DOS O MÁS convocatorias: 66
+  (descartados 1416 enunciados más cortos, son fórmulas de redacción; y 106 repetidos dentro de una misma convocatoria, que son solapamiento entre fuentes)
+  1. en 3 convocatorias  DENTRO DE LAS TÉCNICAS DE HIDROTERAPIA GENERAL, LAS AFUSIONES HACEN REFERENCIA A:
+        [Osakidetza s/f, Osakidetza 2015, Osakidetza 2018]
+  2. en 3 convocatorias  DESPUÉS DE UNA LUXACIÓN ANTERIOR O ANTEROINTERNA DEL HOMBRO, EN UN PRIMER MOMENTO SE DEBERÁN
+        [Osakidetza s/f, Osakidetza 2015, Osakidetza 2018]
+  3. en 3 convocatorias  ENTRE LAS RECOMENDACIONES PARA EL TRATAMIENTO DEL DOLOR DE ESPALDA EN EL EMBARAZO NO SE ENCU
+        [Osakidetza s/f, Osakidetza 2015, Osakidetza 2018]
+  4. en 3 convocatorias  ¿CUÁL DE LOS SIGUIENTES AGENTES FÍSICOS ES EL MÁS INDICADO PARA AUMENTAR EL FLUJO SANGUÍNEO,
+        [Osakidetza s/f, Osakidetza 2015, Osakidetza 2018]
+  5. en 2 convocatorias  Con relación a los diferentes tipos de láser utilizados en fisioterapia, señale la respuesta
+        [Osakidetza s/f, Osakidetza 2022]
+  6. en 2 convocatorias  Con relación al uso de la estimulación eléctrica nerviosa transcutánea (TENS), señale la afi
+        [Osakidetza s/f, Osakidetza 2022]
+  7. en 2 convocatorias  Dentro de la fisioterapia aplicada a ancianos que les han realizado una protetización total 
+        [Osakidetza s/f, Osakidetza 2022]
+  8. en 2 convocatorias  EN EL TRATAMIENTO DE UN ESGUINCE DE TOBILLO (DISTENSIÓN DE LIGAMENTOS LATERALES), NO SE DEBE
+        [Osakidetza s/f, Osakidetza 2018]
+  9. en 2 convocatorias  EN EL TRATAMIENTO DE UNA ÚLCERA DÉRMICA CON ULTRASONIDOS, SE SELECCIONARÁ UNA FRECUENCIA Y U
+        [Osakidetza s/f, Osakidetza 2018]
+ 10. en 2 convocatorias  EN LAS TRACCIONES VERTEBRALES, SEÑALE CUÁL DE LAS SIGUIENTES NO ES UNA CONTRAINDICACIÓN ABSO
+        [Osakidetza s/f, Osakidetza 2018]
+ 11. en 2 convocatorias  EN PACIENTES QUE PRESENTAN ESCÁPULAS ALADAS, LOS PRINCIPALES MÚSCULOS QUE SE DEBEN FORTALECE
+        [Osakidetza 2015, Osakidetza 2018]
+ 12. en 2 convocatorias  EN RELACIÓN A LOS PRINCIPIOS DE REALIZACIÓN DE LOS ESTIRAMIENTOS MUSCULOTENDINOSOS, SEÑALE L
+        [Osakidetza 2015, Osakidetza 2018]
+ 13. en 2 convocatorias  EN RELACIÓN AL LATIGAZO CERVICAL, INDIQUE CUÁL DE LAS SIGUIENTES AFIRMACIONES ES FALSA:
+        [Osakidetza 2015, Osakidetza 2018]
+ 14. en 2 convocatorias  EN UNA FRACTURA DEL ACETÁBULO (CAVIDAD COTILOIDEA), UNA IMPORTANTE COMPLICACIÓN A LARGO PLAZ
+        [Osakidetza s/f, Osakidetza 2018]
+ 15. en 2 convocatorias  ENTRE LOS PARÁMETROS DE ESTIMULACIÓN ELÉCTRICA DE LA CONTRACCIÓN DE UN MÚSCULO INERVADO, NO 
+        [Osakidetza s/f, Osakidetza 2018]
+ 16. en 2 convocatorias  ES UNA CONTRAINDICACIÓN ABSOLUTA PARA LA REALIZACIÓN DE EJERCICIO FÍSICO DURANTE EL EMBARAZO
+        [Osakidetza s/f, Osakidetza 2018]
+ 17. en 2 convocatorias  El dolor de hombro en el síndrome subacromial puede ser minimizado mediante ejercitación mus
+        [Osakidetza s/f, Osakidetza 2022]
+ 18. en 2 convocatorias  El entrenamiento pliométrico, que puede utilizarse en fases avanzadas de la rehabilitación d
+        [Osakidetza s/f, Osakidetza 2022]
+ 19. en 2 convocatorias  El tratamiento de fisioterapia de tipo conservador en las rodillas con lesión de menisco es 
+        [Osakidetza s/f, Osakidetza 2022]
+ 20. en 2 convocatorias  El tratamiento de fisioterapia en la disminución de la hipertonía en la extremidad superior 
+        [Osakidetza s/f, Osakidetza 2022]
+ 21. en 2 convocatorias  En el caso de una fractura epicondilea en fase de inmovilización absoluta, se recomienda, se
+        [Osakidetza s/f, Osakidetza 2022]
+ 22. en 2 convocatorias  En las disfunciones del suelo pélvico, la electroestimulación está indicada para:
+        [Osakidetza s/f, Osakidetza 2022]
+ 23. en 2 convocatorias  En las fracturas de cadera, es importante valorar la fuerza del músculo glúteo medio, lo cua
+        [Osakidetza s/f, Osakidetza 2022]
+ 24. en 2 convocatorias  Entre las características fundamentales de la estimulación nerviosa transcutánea (TENS), señ
+        [Osakidetza s/f, Osakidetza 2022]
+ 25. en 2 convocatorias  INDIQUE CUÁL DE LAS SIGUIENTES TÉCNICAS DE TRATAMIENTO NO SE CONSIDERA DENTRO DE LA MECANOTE
+        [Osakidetza s/f, Osakidetza 2018]
+ 26. en 2 convocatorias  Indique la respuesta INCORRECTA con relación a las siguientes modalidades de sensibilidad pr
+        [Osakidetza s/f, Osakidetza 2022]
+ 27. en 2 convocatorias  LA ACTIVIDAD MUSCULAR EN LA QUE EL MOVIMIENTO ES SUPERIOR A LA RESISTENCIA, SE CONOCE COMO:
+        [Osakidetza s/f, Osakidetza 2018]
+ 28. en 2 convocatorias  LA APLICACIÓN DE LA BOMBA DE COMPRESIÓN NEUMÁTICA INTERMITENTE EN EL TRATAMIENTO DEL EDEMA, 
+        [Osakidetza s/f, Osakidetza 2018]
+ 29. en 2 convocatorias  LA APLICACIÓN DE UNA CORRIENTE ELÉCTRICA DIRECTAMENTE SOBRE EL MÚSCULO PARA DESENCADENAR UNA
+        [Osakidetza s/f, Osakidetza 2018]
+ 30. en 2 convocatorias  LA BANDA DE FRECUENCIA UTILIZADA MÁS FRECUENTEMENTE EN LOS APARATOS DE ONDA CORTA EN APLICAC
+        [Osakidetza s/f, Osakidetza 2018]
+ 31. en 2 convocatorias  LA FRACTURA DIAFISARIA DEL RADIO ASOCIADA A UNA LUXACIÓN DISTAL DEL CÚBITO, RECIBE EL NOMBRE
+        [Osakidetza s/f, Osakidetza 2018]
+ 32. en 2 convocatorias  LLEVAR A CABO ACTIVIDADES ENCAMINADAS A LA PROFUNDIZACIÓN Y AL DESCUBRIMIENTO DE NUEVOS CAMP
+        [Osakidetza s/f, Osakidetza 2018]
+ 33. en 2 convocatorias  LOS ELEMENTOS QUE CONFIGURAN EL DIAGNÓSTICO FISIOTERAPÉUTICO SON TODOS EXCEPTO UNO, SEÑÁLELO
+        [Osakidetza 2015, Osakidetza 2018]
+ 34. en 2 convocatorias  LOS SIGUIENTES SÍNTOMAS SON CARACTERÍSTICOS DE LA ENFERMEDAD DE PARKINSON, EXCEPTO UNO. ¿CUÁ
+        [Osakidetza s/f, Osakidetza 2018]
+ 35. en 2 convocatorias  La Clasificación Internacional del Funcionamiento, de la Discapacidad y de la Salud (CIF), s
+        [Osakidetza s/f, Osakidetza 2022]
+ 36. en 2 convocatorias  La banda de frecuencia utilizada más frecuentemente en los aparatos de microonda en aplicaci
+        [Osakidetza s/f, Osakidetza 2022]
+ 37. en 2 convocatorias  La combinación de los siguientes movimientos del menisco hace que pueda ser fácilmente lesio
+        [Osakidetza s/f, Osakidetza 2022]
+ 38. en 2 convocatorias  La electroterapia es una de las técnicas empleadas para el tratamiento del dolor producido p
+        [Osakidetza s/f, Osakidetza 2022]
+ 39. en 2 convocatorias  La entrevista de fisioterapia es un instrumento básico de la atención fisioterapéutica, y só
+        [Osakidetza s/f, Osakidetza 2022]
+ 40. en 2 convocatorias  La exploración de los dermatomas de la extremidad inferior es importante tras las fracturas 
+        [Osakidetza s/f, Osakidetza 2022]

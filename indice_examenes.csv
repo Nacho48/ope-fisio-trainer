@@ -1,0 +1,55 @@
+prio,ccaa_org,ano_examen,descripcion,slug_blog
+1,SESCAM CLM,2026-03-15,OPE 2023/24 Parte 1 [VOLCADO],p/test-de-fisioterapeutas-opes-202324.html
+2,SESCAM CLM,2026-03-15,OPE 2023/24 Parte 2,p/test-de-fisioterapeutas-opes-202324_0964609991.html
+3,Red Sanitaria Militar,2026-05-09,OPE 2025 Libre Parte 1,p/test-de-fisioterapeutas-ope-2025-rsm.html
+4,Red Sanitaria Militar,2026-05-09,OPE 2025 Libre Parte 2,p/test-de-fisioterapeutas-ope-2025-rsm_0865524419.html
+5,SAS Andalucia,2025-05-17,OPEs 2022/23/24 Parte 1,p/test-de-fisioterapeutas-opes-20222324.html
+6,SAS Andalucia,2025-05-17,OPEs 2022/23/24 Parte 2,p/test-de-fisioterapeutas-opes-20222324_3.html
+7,SAS Andalucia,2025-05-17,OPEs 2022/23/24 Supuestos,p/test-de-fisioterapeutas-opes-20222324_5.html
+8,SERMAS Madrid,2025-05-25,OPE 2020 Promocion Interna,p/test-de-fisioterapeutas-ope-2020-sermas.html
+9,SCS Cantabria,2024-10-19,OPE 2022 Estabilizacion Parte 1,p/test-de-fisioterapeutas-ope_1.html
+10,SCS Cantabria,2024-10-19,OPE 2022 Estabilizacion Parte 2,p/test-de-fisioterapeutas-ope_2.html
+11,IB-Salut Baleares,2023-12-17,OPE 2022 + Estabilizacion,p/test-de-fisioterapeutas-ope-2022.html
+12,SAS Andalucia,2023-10-21,OPE 2021 Estabilizacion Parte 1,p/test-de-fisioterapeutas-ope_7.html
+13,SAS Andalucia,2023-10-21,OPE 2021 Estabilizacion Parte 2,p/test-de-fisioterapeutas-ope_9.html
+14,SAS Andalucia,2023-10-21,OPE 2021 Estabilizacion Supuestos,p/test-de-fisioterapeutas-ope_10.html
+15,Osakidetza,2022-07-02,OPEs 2018/19 Modelo A Parte 1,p/test-de-fisioterapeutas-opes-201819.html
+16,Osakidetza,2022-07-02,OPEs 2018/19 Modelo A Parte 2,p/test-de-fisioterapeutas-opes-201819_2.html
+17,SAS Andalucia,2021-11-14,OPEs 2018/19/20/21 Parte 1,p/test-de-fisioterapeutas-opes-2018192021.html
+18,SAS Andalucia,2021-11-14,OPEs 2018/19/20/21 Parte 2,p/test-de-fisioterapeutas-opes-2018192021_28.html
+19,SAS Andalucia,2021-11-14,OPEs 2018/19/20/21 Supuestos,p/test-de-fisioterapeutas-opes-2018192021_29.html
+20,SCS Canarias,2019-05-21,OPEs 2016/17/18 Parte 1,p/test-de-fisioterapeuta-opes-20161718.html
+21,SCS Canarias,2019-05-21,OPEs 2016/17/18 Parte 2,p/test-de-fisioterapeuta-opes-20161718_15.html
+22,SAS Andalucia,2019-02-17,OPE 2016/17 Parte 1,p/test-de-fisioterapeuta-ope-2016-2017_19.html
+23,SAS Andalucia,2019-02-17,OPE 2016/17 Parte 2,p/test-de-fisioterapeuta-ope-2016-2017_6.html
+24,SAS Andalucia,2019-02-17,OPE 2016/17 Supuestos,p/test-de-fisioterapeuta-ope-2016-2017_42.html
+25,SERIS La Rioja,2019-02-17,OPE Estabilizacion Parte 1,p/test-de-fisioterapeutas-ope.html
+26,SERIS La Rioja,2019-02-17,OPE Estabilizacion Parte 2,p/test-de-fisioterapeutas-ope_20.html
+27,SES Extremadura,2019-02-17,OPE 2015/16/17 Parte 1,p/test-de-fisioterapeuta-ope-20151617-ses.html
+28,SES Extremadura,2019-02-17,OPE 2015/16/17 Parte 2,p/test-de-fisioterapeuta-ope-20151617-ses_20.html
+29,SMS Murcia,2019-02-17,OPE 2017/18 Parte 1,p/test-de-fisioterapeuta-opes-201718-sms.html
+30,SMS Murcia,2019-02-17,OPE 2017/18 Parte 2,p/test-de-fisioterapeuta-opes-201718-sms_21.html
+31,Osakidetza,2018-06-15,OPE 2016/17 Parte 1,p/test-de-fisioterapeuta-ope-2016-2017.html
+32,Osakidetza,2018-06-15,OPE 2016/17 Parte 2,p/test-de-fisioterapeuta-ope-2016-2017_18.html
+33,SACYL CyL,2016-11-20,OPE 2014/16 Parte 1,p/test-de-fisioterapeuta-ope-2014-2016.html
+34,SACYL CyL,2016-11-20,OPE 2014/16 Parte 2,p/test-de-fisioterapeuta-ope-2014-2016_17.html
+35,SAS Andalucia,2016-02-06,OPE 2013/15 Parte 1,p/test-de-fisioterapeuta-ope-2013-2015.html
+36,SAS Andalucia,2016-02-06,OPE 2013/15 Parte 2,p/test-de-fisioterapeuta-ope-2013-2015_17.html
+37,SAS Andalucia,2016-02-06,OPE 2013/15 Supuestos,p/test-de-fisioterapeuta-ope-2013-2015_87.html
+38,DGA Aragon,2015-12-13,OPE Complementaria 2011,p/test-de-fisioterapeuta-ope.html
+39,Osakidetza,2015-11-22,OPE 2014/15 Parte 1,p/test-de-fisioterapeuta-ope-201415.html
+40,Osakidetza,2015-11-22,OPE 2014/15 Parte 2,p/test-de-fisioterapeuta-ope-201415_15.html
+41,SCS Canarias,2012-10-12,OPE 2007 Parte 1,p/test-de-fisioterapeuta-ope-2007-scs.html
+42,SCS Canarias,2012-10-12,OPE 2007 Parte 2,p/test-de-fisioterapeuta-ope-2007-scs_14.html
+43,SCS Canarias,2012-10-12,OPE 2007 Parte 3,p/test-de-fisioterapeuta-ope-2007-scs_16.html
+44,Osakidetza,2012-07-15,OPE 2011 Parte 1,p/test-de-fisioterapeuta-ope-osakidetza.html
+45,Osakidetza,2012-07-15,OPE 2011 Parte 2,p/test-de-fisioterapeuta-ope-osakidetza_13.html
+46,SCS Cantabria,2011,OPE 2011 Libre Parte 1,p/test-de-fisioterapeuta-ope-2011-scs.html
+47,SCS Cantabria,2011,OPE 2011 Libre Parte 2,p/test-de-fisioterapeuta-ope-2011-scs_13.html
+48,SCS Cantabria,2011,OPE 2011 Libre Parte 3,p/test-de-fisioterapeuta-ope-2011-scs_24.html
+49,Hosp Poniente,2011,CHARE de Loja,p/test-de-fisioterapeuta-hospital-de-alta.html
+50,SALUD Aragon,2009-06-21,OPE 2009 Parte 1,p/test-de-fisioterapeuta-ope-2009-salud.html
+51,SALUD Aragon,2009-06-21,OPE 2009 Parte 2,p/test-de-fisioterapeuta-ope-2009-salud_10.html
+52,JCyL,2003,Foro Convergencia Parte 1,p/test-de-fisioterapeuta-junta-de.html
+53,JCyL,2003,Foro Convergencia Parte 2,p/test-de-fisioterapeuta-junta-de_10.html
+54,SAS Andalucia,2002,OPE Consolidacion,p/ope-consolidacion-sas-2002_14.html

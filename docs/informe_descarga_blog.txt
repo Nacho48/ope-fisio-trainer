@@ -1,0 +1,60 @@
+página                                                         KB  onclick  estado
+--------------------------------------------------------------------------------------------
+test-de-fisioterapeutas-opes-202324.html                      482      200  YA ESTABA
+test-de-fisioterapeutas-opes-202324_0964609991.html           485      220  OK
+test-de-fisioterapeutas-ope-2025-rsm.html                     491      220  OK
+test-de-fisioterapeutas-ope-2025-rsm_0865524419.html          484      220  OK
+test-de-fisioterapeutas-opes-20222324.html                    484      200  OK
+test-de-fisioterapeutas-opes-20222324_3.html                  479      200  OK
+test-de-fisioterapeutas-opes-20222324_5.html                  494      212  OK
+test-de-fisioterapeutas-ope-2020-sermas.html                  500      280  OK
+test-de-fisioterapeutas-ope_1.html                            488      220  OK
+test-de-fisioterapeutas-ope_2.html                            484      220  OK
+test-de-fisioterapeutas-ope-2022.html                         501      288  OK
+test-de-fisioterapeutas-ope_7.html                            481      200  OK
+test-de-fisioterapeutas-ope_9.html                            475      200  OK
+test-de-fisioterapeutas-ope_10.html                           487      212  OK
+test-de-fisioterapeutas-opes-201819.html                      482      220  OK
+test-de-fisioterapeutas-opes-201819_2.html                    482      220  OK
+test-de-fisioterapeutas-opes-2018192021.html                  481      200  OK
+test-de-fisioterapeutas-opes-2018192021_28.html               483      200  OK
+test-de-fisioterapeutas-opes-2018192021_29.html               498      212  OK
+test-de-fisioterapeuta-opes-20161718.html                     489      260  OK
+test-de-fisioterapeuta-opes-20161718_15.html                  490      260  OK
+test-de-fisioterapeuta-ope-2016-2017_19.html                  480      200  OK
+test-de-fisioterapeuta-ope-2016-2017_6.html                   483      200  OK
+test-de-fisioterapeuta-ope-2016-2017_42.html                  487      212  OK
+test-de-fisioterapeutas-ope.html                              479      200  OK
+test-de-fisioterapeutas-ope_20.html                           482      200  OK
+test-de-fisioterapeuta-ope-20151617-ses.html                  501      280  OK
+test-de-fisioterapeuta-ope-20151617-ses_20.html               497      280  OK
+test-de-fisioterapeuta-opes-201718-sms.html                   492      240  OK
+test-de-fisioterapeuta-opes-201718-sms_21.html                493      260  OK
+test-de-fisioterapeuta-ope-2016-2017.html                     481      220  OK
+test-de-fisioterapeuta-ope-2016-2017_18.html                  481      220  OK
+test-de-fisioterapeuta-ope-2014-2016.html                     477      200  OK
+test-de-fisioterapeuta-ope-2014-2016_17.html                  475      196  OK
+test-de-fisioterapeuta-ope-2013-2015.html                     480      200  OK
+test-de-fisioterapeuta-ope-2013-2015_17.html                  480      200  OK
+test-de-fisioterapeuta-ope-2013-2015_87.html                  490      212  OK
+test-de-fisioterapeuta-ope.html                               494      260  OK
+test-de-fisioterapeuta-ope-201415.html                        486      240  OK
+test-de-fisioterapeuta-ope-201415_15.html                     489      240  OK
+test-de-fisioterapeuta-ope-2007-scs.html                      476      200  OK
+test-de-fisioterapeuta-ope-2007-scs_14.html                   476      200  OK
+test-de-fisioterapeuta-ope-2007-scs_16.html                   485      240  OK
+test-de-fisioterapeuta-ope-osakidetza.html                    476      180  OK
+test-de-fisioterapeuta-ope-osakidetza_13.html                 474      172  OK
+test-de-fisioterapeuta-ope-2011-scs.html                      484      200  OK
+test-de-fisioterapeuta-ope-2011-scs_13.html                   479      200  OK
+test-de-fisioterapeuta-ope-2011-scs_24.html                   492      240  OK
+test-de-fisioterapeuta-hospital-de-alta.html                  484      220  OK
+test-de-fisioterapeuta-ope-2009-salud.html                    476      196  OK
+test-de-fisioterapeuta-ope-2009-salud_10.html                 478      220  OK
+test-de-fisioterapeuta-junta-de.html                          473      200  OK
+test-de-fisioterapeuta-junta-de_10.html                       473      200  OK
+ope-consolidacion-sas-2002_14.html                            448        0  FALLO: sin onclick
+
+54 páginas | 11592 onclick en total | 1 con fallo
+
+[exited with code 0]

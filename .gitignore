@@ -1,0 +1,17 @@
+# Entorno aislado para los embeddings (126 MB). Se recrea con:
+#   python -m venv --system-site-packages .venv_emb
+#   .venv_emb/Scripts/pip install "transformers==4.44.2" "tokenizers<0.20"
+.venv_emb/
+
+# Fuentes descargadas (109 MB): PDF oficiales y páginas del blog. Se vuelven a
+# bajar con descargar_blog.py, descargar_sespa2025.py y descubrir_asturias.py.
+fuentes/
+raw/
+
+# Derivados regenerables
+ocr_cache/
+corpus/embeddings.npy
+corpus/embeddings_ids.json
+__pycache__/
+*.pyc
+.pytest_cache/

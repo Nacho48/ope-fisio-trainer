@@ -1,0 +1,15 @@
+== osakidetza_comun_200.pdf ==
+preguntas          : 200 de 200 esperadas
+con 4 opciones     : 200
+huecos             : ninguno
+enunciados cortos  : ninguno
+erratas corregidas : 0
+
+== osakidetza_especifico_500.pdf ==
+preguntas          : 500 de 500 esperadas
+con 4 opciones     : 500
+huecos             : ninguno
+enunciados cortos  : [131, 220]
+erratas corregidas : 2
+   · pág. 20: el PDF numera '100' donde corresponde 110; se ingiere como 110
+   · pág. 67: el PDF numera '253' donde corresponde 353; se ingiere como 353

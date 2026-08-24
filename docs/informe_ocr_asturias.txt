@@ -1,0 +1,8 @@
+== asturias2019_cuadernillo.pdf ==
+preguntas detectadas : 95 de 95 esperadas
+cuadran (4 opciones) : 94
+NO cuadran           : 1
+huecos de numeración : ninguno
+duplicados           : ninguno
+confianza OCR media  : 0.941  (mínima 0.840)
+   · nº 6 (pág. 2): opción vacía o truncada

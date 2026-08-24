@@ -1,0 +1,11 @@
+== sas2025_cuadernillo.pdf (turno LIBRE) ==
+preguntas        : 153 de 153 esperadas
+  teorico  : 100  (1-100)
+  practico :  50  (101-150)
+  reserva  :   3  (151-153)
+con 4 opciones   : 153
+plantilla libre  : 153 respuestas
+sin respuesta    : ninguna
+de reserva       : 3
+con caso clínico : 50
+penalización     : 0.25 por fallo

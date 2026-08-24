@@ -1,0 +1,19 @@
+ficheros procesados: 53 | preguntas: 2898 | al corpus: 2863 | a cuarentena: 35
+letra correcta: A=652 (22.8%)  B=737 (25.7%)  C=710 (24.8%)  D=764 (26.7%)
+a cuarentena por:
+  ×17  opción N sin marca Correcto/Incorrecto
+  ×14  opciones truncadas o vacías: [N, N, N, N]
+  ×12  N opciones marcadas como Correcto
+  ×4  opciones truncadas o vacías: [N, N]
+  ×4  opciones truncadas o vacías: [N, N, N]
+  ×1  opciones truncadas o vacías: [N]
+avisos (no impiden la ingesta):
+  ×1567  el enunciado dice N y el form N
+  test-de-fisioterapeuta-ope-2016-2017_19.html: rango 1-50 huecos=[27] duplicados=[37]
+ids que ya existían y NO se han reescrito: 1 (SAS2019-22-037…)
+RECURRENCIAS: 31 enunciados repetidos
+  ×9  SEÑALE LA RESPUESTA INCORRECTA:…  [OSAKIDETZA2018-32, SCS2019-21, SCS2024-09, SCS2024-10, SESCAM2026-02]
+  ×8  SEÑALE LA RESPUESTA CORRECTA:…  [DGA2015-38, OSAKIDETZA2012-45, SAS2023-14, SCS2024-09, SCS2024-10, SESCAM2026-02]
+  ×6  Señale la afirmación CORRECTA:…  [SAS2025-07, SES2019-27, SESCAM2026-02, SMS2019-29, SMS2019-30]
+  ×3  RESPECTO A LA ESCLEROSIS MÚLTIPLE, ES FALSO QUE:…  [OSAKIDETZA2012-45, OSAKIDETZA2015-40, OSAKIDETZA2018-32]
+  ×2  EL SECRETO PROFESIONAL AFECTA A:…  [JCYL2003-52, JCYL2003-53]
