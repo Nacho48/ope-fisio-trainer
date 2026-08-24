@@ -105,6 +105,21 @@ details > summary{cursor:pointer; font-weight:700; padding:8px 0; list-style:rev
        padding:10px; text-align:center; font-size:.95rem}
 .cierre{background:color-mix(in srgb, var(--acento) 16%, transparent);
         border-radius:8px; padding:9px; margin:8px 0 0}
+
+/* vista corta del panel: marcadores + botón de ayuda */
+.marcadores{display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin-top:10px}
+.marcador-f{background:var(--panel2); border:1px solid var(--borde); border-radius:8px;
+            padding:5px 9px; font-size:.78rem; color:var(--tenue)}
+.marcador-f b{font-size:.95rem; color:var(--txt); font-variant-numeric:tabular-nums}
+.marcador-f.alto{border-color:var(--acento);
+                 background:color-mix(in srgb, var(--acento) 14%, var(--panel2))}
+.marcador-f.alto b{color:var(--acento)}
+.ayuda{width:1.9em; height:1.9em; border-radius:50%; border:1px solid var(--borde);
+       background:var(--panel2); color:var(--tenue); font-weight:800; cursor:pointer;
+       font-size:.85rem; line-height:1; margin-left:auto}
+.ayuda:hover{border-color:var(--acento); color:var(--acento)}
+#det-porque{display:none}
+#det-porque.visible{display:block}
 </style>
 </head>
 <body>
@@ -189,6 +204,10 @@ details > summary{cursor:pointer; font-weight:700; padding:8px 0; list-style:rev
 <section id="cobertura" class="oculto">
   <h1>Cobertura del temario</h1>
   <div class="card" id="cob-resumen"></div>
+  <div class="card">
+    <h1 style="font-size:1rem">Cuánto has visto de cada bolsa</h1>
+    <div id="cob-bolsas"></div>
+  </div>
   <div class="card" id="cob-siguiente"></div>
   <div class="card">
     <h1 style="font-size:1rem">Los 44 temas, por peso en el examen</h1>
@@ -223,13 +242,30 @@ let cronoId = null;
 function cargar(){
   try{
     const s = JSON.parse(localStorage.getItem(CLAVE) || "{}");
-    return {historial: s.historial || [], porTema: s.porTema || {}, sesionAbierta: s.sesionAbierta || null};
-  }catch(e){ return {historial:[], porTema:{}, sesionAbierta:null}; }
+    const e = {historial: s.historial || [], porTema: s.porTema || {},
+               vistas: s.vistas || null, sesionAbierta: s.sesionAbierta || null};
+    return migrar(e);
+  }catch(e){ return {historial:[], porTema:{}, vistas:{}, sesionAbierta:null}; }
+}
+
+/* Migración, nunca reseteo: `vistas` se añadió después, y el historial ya guarda
+   el id de cada respuesta, así que se reconstruye entero de lo que ya había. Un
+   historial viejo no pierde nada. */
+function migrar(e){
+  if(e.vistas) return e;
+  e.vistas = {};
+  for(const s of e.historial)
+    for(const r of (s.respuestas || [])){
+      if(!r.id) continue;
+      const v = e.vistas[r.id] || (e.vistas[r.id] = {n:0, ok:0});
+      v.n++; if(r.ok) v.ok++;
+    }
+  return e;
 }
 function guardar(){
   try{
     localStorage.setItem(CLAVE, JSON.stringify({
-      historial: estado.historial, porTema: estado.porTema,
+      historial: estado.historial, porTema: estado.porTema, vistas: estado.vistas,
       sesionAbierta: sesion ? {preguntas: sesion.preguntas.map(p=>p.id), i: sesion.i,
                                respuestas: sesion.respuestas, segundos: sesion.segundos} : null
     }));
@@ -291,11 +327,44 @@ function calcularMediana(){
   MEDIANA_TOTAL = vs.length ? vs[Math.floor(vs.length/2)] : 0;
 }
 
+/* Novedad: lo ya visto pierde casi toda su prioridad, para agotar la bolsa antes
+   de repetir. Lo fallado vuelve antes que lo acertado, que es lo que interesa
+   repasar; y nada queda excluido del todo, para que la bolsa nunca se agote. */
+function novedad(p){
+  const v = estado.vistas[p.id];
+  if(!v) return 1;
+  const acierto = v.ok / v.n;
+  return acierto >= 1 ? 0.10 / v.n : 0.45 / v.n;
+}
 function pesoDe(p, modo){
   const f = factores(p);
-  if(modo === "canon")  return f.canon;
-  if(modo === "flojos") return 1 + 4 * f.dominio;
-  return f.total;   // examen, top7 y asturias: los tres factores a la vez
+  const base = modo === "canon" ? f.canon
+             : modo === "flojos" ? 1 + 4 * f.dominio
+             : f.total;   // examen, top7, autonómico y asturias
+  return base * novedad(p);
+}
+
+/* Cuántas preguntas distintas has visto de cada bolsa. Responde a la pregunta de
+   si estás avanzando o rotando sobre las mismas. */
+const BOLSAS = [
+  ["Canon · 2+ convocatorias", p => p.fam !== null && DATOS.familias[p.fam].c >= 2],
+  ["Canon · cualquier familia", p => p.fam !== null],
+  ["Top 7 temas",               p => TOP7.includes(p.tema)],
+  ["Solo autonómico",           p => p.amb === "autonomico"],
+  ["Parte general (T1-T11)",    p => p.tema !== null && p.tema <= 11],
+  ["Parte específica",          p => p.tema !== null && p.tema > 11],
+  ["Todo el banco",             () => true],
+];
+function coberturaBolsas(){
+  return BOLSAS.map(([nombre, filtro]) => {
+    const pool = DATOS.preguntas.filter(filtro);
+    const vistas = pool.filter(p => estado.vistas[p.id]).length;
+    const dominadas = pool.filter(p => {
+      const v = estado.vistas[p.id];
+      return v && v.ok === v.n;
+    }).length;
+    return {nombre, total: pool.length, vistas, dominadas};
+  });
 }
 function elegirPonderado(pool, n, modo){
   const copia = pool.slice();
@@ -425,8 +494,23 @@ function porQueEstaPregunta(p){
         <p class="nota como-leer">${comoLeer}</p></div>
     </div>`;
 
-  return `<details style="margin-top:10px">
-   <summary>Por qué esta pregunta</summary>
+  // Vista corta: tres marcadores, la conclusión, y el desglose detrás del "?".
+  const marca = (etiqueta, valor, alto) =>
+    `<span class="marcador-f${alto ? " alto" : ""}"><b>${valor}</b> ${etiqueta}</span>`;
+  const resumen = `<div class="marcadores">
+      ${marca("peso del tema", f.peso.toFixed(1), veces >= 1.5)}
+      ${marca(f.conv > 1 ? `convocatorias` : "suelta",
+              f.fam ? f.conv : "—", f.conv >= 2)}
+      ${marca(t && t.n >= 3 ? "tu acierto" : "sin datos",
+              t && t.n >= 3 ? Math.round(100*t.ok/t.n) + "%" : "—",
+              f.dominio > 0.55)}
+      <button class="ayuda" id="btn-porque" title="Ver el desglose">?</button>
+    </div>
+    ${domina || `<p class="cierre">Ninguno de los tres factores manda con claridad:
+      es una elección equilibrada.</p>`}`;
+
+  return resumen + `<details id="det-porque" style="margin-top:10px">
+   <summary>Cómo se calcula</summary>
    <div class="porque">
 
     <p>El trainer puntúa cada pregunta con tres factores y te va sirviendo las de
@@ -490,6 +574,8 @@ function responder(k, boton){
   });
 
   sesion.respuestas.push({id:p.id, tema:p.tema, fam:p.fam, ok:acierto, elegida:k});
+  const v = estado.vistas[p.id] || (estado.vistas[p.id] = {n:0, ok:0});
+  v.n++; if(acierto) v.ok++;
   if(p.tema !== null){
     const t = estado.porTema[p.tema] || (estado.porTema[p.tema] = {n:0, ok:0});
     t.n++; if(acierto) t.ok++;
@@ -514,6 +600,12 @@ function responder(k, boton){
   $("feedback").className = "feed " + (acierto ? "ok" : "mal");
   $("feedback").innerHTML = (acierto ? "<b>Correcta</b>" : `<b>Incorrecta</b> · la buena era la ${p.r}`) +
      `<div style="margin-top:6px">${chips}</div>` + porQueEstaPregunta(p);
+  const btn = $("btn-porque"), det = $("det-porque");
+  if(btn && det) btn.onclick = () => {
+    det.classList.toggle("visible");
+    det.open = det.classList.contains("visible");
+  };
+
   $("siguiente").classList.remove("oculto");
   $("siguiente").textContent = (sesion.i === sesion.preguntas.length-1) ? "Ver resultado" : "Siguiente";
   guardar();
@@ -661,6 +753,21 @@ function pintarCobertura(){
        a mano, margen ±${M.margen} preguntas: quién está en cabeza es fiable, el
        orden exacto dentro del grupo no.</p>`;
 
+  $("cob-bolsas").innerHTML =
+    `<table><tr><th>Bolsa</th><th class="num">Vistas</th><th style="width:28%"></th>
+     <th class="num">Sin fallar</th></tr>` +
+    coberturaBolsas().map(b => {
+      const pc = b.total ? Math.round(100 * b.vistas / b.total) : 0;
+      return `<tr><td>${b.nombre}</td>
+        <td class="num"><b>${b.vistas}</b>/${b.total}<br><span class="nota">${pc} %</span></td>
+        <td><div class="barrita"><i style="width:${pc}%"></i></div></td>
+        <td class="num">${b.dominadas}</td></tr>`;
+    }).join("") + `</table>
+    <p class="nota">"Vistas" son preguntas distintas que ya te han salido; "sin
+    fallar", las que acertaste todas las veces. Mientras queden sin ver, el
+    trainer las prioriza: solo repite cuando la bolsa se agota, y entonces vuelve
+    antes lo que fallaste.</p>`;
+
   /* Dónde está el siguiente punto: lo que ganarías llevando cada tema al 80 %.
      Prioriza peso alto con acierto bajo, que es donde una hora cunde más. */
   const ganancia = filas
@@ -724,22 +831,35 @@ function pintarPortada(){
   const filas = filasCobertura();
   const proyeccion = filas.reduce((a,f) => a + f.aseguradas, 0);
   const margen = margenProyeccion(global);
-  const medidos = filas.filter(f => f.medido).length;
+  const medidos = filas.filter(f => f.medido);
+  const respaldado = medidos.reduce((a,f) => a + f.esperadas, 0);
 
+  /* Lo medido va primero y en grande; la proyección, detrás y con su margen.
+     Al revés engaña: un 63/80 sacado de 14 respuestas en 2 temas parece una nota
+     y es una extrapolación de los 42 temas que no has tocado. Además las
+     preguntas no salen al azar —el trainer las elige por peso—, así que tu
+     acierto sobre ellas no es una muestra representativa del examen. */
+  const fiable = respaldado >= 40;
   $("estado-portada").innerHTML =
-    `<div class="grande">${proyeccion.toFixed(0)} <span class="nota"
-       style="font-size:1rem">± ${margen.toFixed(0)}</span> / 80</div>
-     <p>Proyección de nota. ${proyeccion - margen >= 50
-        ? "<b>Aprobado incluso en el peor caso.</b>"
-        : proyeccion >= 50
-          ? `Por encima del 50, pero el margen aún llega hasta ${(proyeccion-margen).toFixed(0)}.`
-          : `Faltan ${(50-proyeccion).toFixed(0)} para el 50.`}</p>
-     <p class="nota">${global.n} preguntas respondidas ·
-     ${Math.round(100*global.tasa)} % de acierto · ${estado.historial.length} sesiones ·
-     ${medidos} de 44 temas con datos propios</p>
-     ${global.n < 40 ? `<p class="nota">Con ${global.n} respuestas el margen es
-     grande: la proyección usa tu acierto medio en los temas que aún no has
-     tocado. Se afina sola a partir de unas 40.</p>` : ""}`;
+    `<div class="grande">${global.n} <span class="nota" style="font-size:1rem">respuestas ·
+       ${Math.round(100*global.tasa)} % acierto</span></div>
+     <table style="margin:10px 0">
+       <tr><td>Temas con datos propios</td>
+           <td class="num"><b>${medidos.length}</b> de 44</td></tr>
+       <tr><td>Del examen ya respaldado<br><span class="nota">preguntas cubiertas por esos temas</span></td>
+           <td class="num"><b>${respaldado.toFixed(0)}</b> de 80</td></tr>
+     </table>
+     <p${fiable ? "" : ' class="nota"'}>Estimación de nota:
+       <b>${proyeccion.toFixed(0)} ± ${margen.toFixed(0)}</b> sobre 80${
+         fiable ? (proyeccion - margen >= 50
+           ? " · <b>aprobado incluso en el peor caso</b>"
+           : proyeccion >= 50 ? " · por encima del 50" : " · por debajo del 50") : ""}.</p>
+     ${fiable ? "" : `<p class="nota">Esa cifra todavía no significa gran cosa:
+       sale de extrapolar tu acierto a los ${44 - medidos.length} temas que no has
+       tocado, y las preguntas no salen al azar sino elegidas por peso. Se vuelve
+       fiable cuando "respaldado" pase de 40.</p>`}
+     <p class="nota">${estado.historial.length} sesiones · quedan
+     ${Math.max(0, Math.ceil((new Date(FECHA_EXAMEN) - new Date())/86400000))} días</p>`;
 }
 
 /* ====== ESTADÍSTICAS ====== */

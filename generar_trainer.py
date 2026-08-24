@@ -90,6 +90,37 @@ def pesos_por_tema(ruta_referencia: Path) -> tuple[dict[int, dict], dict]:
     return pesos, meta
 
 
+# Normativa autonómica de OTRA comunidad: el Estatuto de Cantabria, la Ley de
+# Salud de Aragón o la Agencia de Calidad de Andalucía no caen en un examen del
+# SESPA. Son 79 preguntas que además quedan sin tema (no encajan en el temario
+# asturiano) y que, al no exigirse tema para jugar, se colaban en el modo canon.
+RE_OTRA_CCAA = re.compile(
+    r"\bandaluc\w*|junta de andalucia|servicio andaluz|\bcanari\w*|\bcantabr\w*"
+    r"|extremen\w*|\bextremadura\b|\bmurcia\w*|\bla rioja\b|castilla y leon"
+    r"|castilla-?la mancha|comunidad de madrid|\bbalear\w*|\baragon\w*|comunitat"
+    r"|generalitat|\bgalicia\b|\bnavarra\b|\beuskadi\b|pais vasco|osakidetza"
+    r"|\bcatalu\w*|sescam|sacyl|sermas|ib-?salut", re.IGNORECASE)
+RE_ASTURIAS = re.compile(r"asturias|principado|sespa|\bera\b", re.IGNORECASE)
+RE_JURIDICO = re.compile(
+    r"\bley\b|\bdecreto\b|\bestatuto\b|\bplan\b|\bconsejeri|\bparlamento"
+    r"|\bestatutario|\bordenacion|servicio de salud|consejo de gobierno|\barticulo\b",
+    re.IGNORECASE)
+
+
+def es_normativa_ajena(r: dict) -> bool:
+    """Norma u órgano de otra comunidad, sin mención a Asturias: no le sirve."""
+    texto = quitar_tildes(r["q"] + " " + " ".join(r.get("opts") or []))
+    return bool(RE_OTRA_CCAA.search(texto)
+                and not RE_ASTURIAS.search(texto)
+                and RE_JURIDICO.search(texto))
+
+
+def quitar_tildes(texto: str) -> str:
+    import unicodedata
+    s = unicodedata.normalize("NFKD", texto.lower())
+    return "".join(c for c in s if not unicodedata.combining(c))
+
+
 def cargar_autonomico(ruta: Path) -> list[dict]:
     """Trae el bloque autonómico del SESPA 2025 al esquema del corpus.
 
@@ -176,6 +207,8 @@ def main() -> int:
     registros += cargar_autonomico(args.autonomico)
     # Sin respuesta no hay nada que entrenar.
     registros = [r for r in registros if r.get("resp") in ("A", "B", "C", "D")]
+    ajenas = [r for r in registros if es_normativa_ajena(r)]
+    registros = [r for r in registros if r not in ajenas]
 
     familias_js: dict[str, dict] = {}
     fam_de_id: dict[str, int] = {}
@@ -241,6 +274,7 @@ def main() -> int:
     generales = sum(1 for p in preguntas if p["tema"] and p["tema"] <= 11)
     print(f"  parte general: {generales} · específico: "
           f"{sum(1 for p in preguntas if p['tema'] and p['tema'] > 11)}")
+    print(f"  descartadas por normativa de otra CCAA: {len(ajenas)}")
     return 0
 
 
